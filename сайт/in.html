@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Famacolor - Порошковые краски</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amaze&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Amaze', 'Arial', sans-serif;
+        }
+        
+        body {
+            background: white;
+            color: #0a1f44;
+            line-height: 1.6;
+            overflow-x: hidden;
+            padding-top: 70px; /* Добавлено для фиксированного header */
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Шапка с градиентом */
+        header {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        /* Мобильное меню */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        
+        .menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 4px 0;
+            transition: 0.3s;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: #a3d0ff;
+        }
+        
+        /* Главный экран */
+        .hero {
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.9), rgba(42, 82, 152, 0.9)), 
+                        url('img/hero-bg.jpg') center/cover no-repeat;
+            color: white;
+            padding: 150px 0 100px;
+            text-align: center;
+            min-height: calc(100vh - 70px);
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 31, 68, 0.5);
+            z-index: -1;
+        }
+        
+        .hero h1 {
+            font-size: clamp(48px, 8vw, 84px); /* Адаптивный размер */
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .hero p {
+            font-size: clamp(20px, 3vw, 28px);
+            margin-bottom: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            color: #e6f0ff;
+        }
+        
+        /* О нас */
+        .about {
+            padding: 100px 0;
+            background: white;
+        }
+        
+        .about h2 {
+            color: #1e3c72;
+            font-size: clamp(28px, 5vw, 36px);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .about-content {
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
+            align-items: center;
+        }
+        
+        .about-text {
+            flex: 1;
+            color: #0a1f44;
+        }
+        
+        .about-text p {
+            margin-bottom: 20px;
+            font-size: 18px;
+            line-height: 1.8;
+        }
+        
+        .about-image {
+            flex: 1;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(30, 60, 114, 0.15);
+            transition: transform 0.5s;
+            max-width: 100%;
+        }
+        
+        .about-image:hover {
+            transform: translateY(-10px);
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        /* Продукция */
+        .services {
+            padding: 100px 0;
+            background: #f5f9ff;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            font-size: clamp(28px, 5vw, 36px);
+            color: #1e3c72;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+        
+        .service-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(30, 60, 114, 0.1);
+            text-align: center;
+            transition: all 0.4s ease;
+            border: 1px solid #e0e9ff;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(30, 60, 114, 0.2);
+            border-color: #a3d0ff;
+        }
+        
+        .service-card h3 {
+            color: #1e3c72;
+            font-size: 24px;
+            margin: 20px 0 10px;
+        }
+        
+        .service-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        /* Подвал */
+        footer {
+            background: linear-gradient(135deg, #0a1f44, #1e3c72);
+            color: white;
+            padding: 80px 0 40px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 50px;
+            margin-bottom: 50px;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 25px;
+            font-size: 22px;
+            color: #a3d0ff;
+        }
+        
+        .footer-column p, .footer-column a {
+            margin-bottom: 15px;
+            display: block;
+            color: #e6f0ff;
+            text-decoration: none;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+        
+        .footer-column a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 14px;
+            color: #a3d0ff;
+        }
+        
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade {
+            opacity: 0;
+            animation: fadeIn 1.2s ease-out forwards;
+        }
+        
+        .delay-1 { animation-delay: 0.3s; }
+        .delay-2 { animation-delay: 0.6s; }
+        
+        /* Адаптация для планшетов */
+        @media (min-width: 768px) {
+            .about-content {
+                flex-direction: row;
+            }
+            
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* Адаптация для десктопов */
+        @media (min-width: 992px) {
+            .services-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        /* Мобильное меню */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 60px;
+            }
+            
+            header {
+                padding: 10px 0;
+            }
+            
+            nav {
+                position: fixed;
+                top: 60px;
+                left: -100%;
+                width: 80%;
+                height: calc(100vh - 60px);
+                background: #0a1f44;
+                box-shadow: 2px 0 20px rgba(0,0,0,0.3);
+                transition: 0.4s;
+                z-index: 999;
+                padding: 40px 30px;
+            }
+            
+            nav.active {
+                left: 0;
+            }
+            
+            nav ul {
+                flex-direction: column;
+            }
+            
+            nav ul li {
+                margin: 20px 0;
+            }
+            
+            .menu-toggle {
+                display: flex;
+            }
+            
+            .menu-toggle.active span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 5px);
+            }
+            
+            .menu-toggle.active span:nth-child(2) {
+                opacity: 0;
+            }
+            
+            .menu-toggle.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(7px, -7px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">FAMACOLOR</div>
+            <div class="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#">Главная</a></li>
+                    <li><a href="#">О нас</a></li>
+                    <li><a href="#">Продукция</a></li>
+                    <li><a href="#">Контакты</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Главный экран -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="animate-fade">FAMACOLOR</h1>
+            <p class="animate-fade delay-1">Инновационные порошковые краски</p>
+            <p class="animate-fade delay-2">Официальный поставщик компании AkzoNobel</p>
+        </div>
+    </section>
+
+    <!-- О нас -->
+    <section class="about">
+        <div class="container">
+            <h2 class="animate-fade">О нашей компании</h2>
+            <div class="about-content">
+                <div class="about-text animate-fade delay-1">
+                    <p>С 2013 года компания FAMACOLOR успешно работает на рынке порошковых красок, предлагая клиентам качественные материалы от мировых производителей.</p>
+                    <p>Мы продаем краски AkzoNobel – признанного лидера, известного безупречным качеством, долговечностью и оптимальным соотношением цены.</p>
+                </div>
+                <div class="about-image animate-fade delay-2">
+                    <img src="img/kraska_spm.jpg" alt="О компании FAMACOLOR" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Наша краска -->
+    <section class="about" style="background-color: #f5f9ff;">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-image animate-fade">
+                    <img src="img/chelik.jpg" alt="Порошковые краски" loading="lazy">
+                </div>
+                <div class="about-text animate-fade delay-1">
+                    <p>Мы рады предложить вам краску, которую привозим с завода в Турции, гарантируя идеальное качество и выгодные цены.</p>
+                    <p>AkzoNobel сочетает премиальное качество и проверенные временем технологии. А FAMACOLOR – ваш надежный партнер, обеспечивающий стабильные поставки и профессиональные решения.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Продукция -->
+    <section class="services">
+        <div class="container">
+            <h2 class="section-title animate-fade">Продукция идеально подходит для:</h2>
+            <div class="services-grid">
+                <div class="service-card animate-fade">
+                    <img src="img/metall.jpg" alt="Металлоконструкций" loading="lazy">
+                    <h3>Металлоконструкций</h3>
+                </div>
+                <div class="service-card animate-fade delay-1">
+                    <img src="img/disks.jpg" alt="Автомобильных деталей" loading="lazy">
+                    <h3>Автомобильных деталей</h3>
+                </div>
+                <div class="service-card animate-fade delay-2">
+                    <img src="img/door.jpg" alt="Декоративных изделий" loading="lazy">
+                    <h3>Декоративных изделий</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Подвал -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column animate-fade">
+                    <h3>Контакты</h3>
+                    <a href="https://wa.me/996776506101">WhatsApp: +996 776 506 101</a>
+                    <p>Телефон: +996 (550) 522 445</p>
+                    <p>+996 (550) 022 445</p>
+                </div>
+                <div class="footer-column animate-fade delay-1">
+                    <h3>Адрес</h3>
+                    <p>г. Бишкек, ул. Лермонтова, 2</p>
+                    <p>Кабинет 108</p>
+                </div>
+                <div class="footer-column animate-fade delay-2">
+                    <h3>Режим работы</h3>
+                    <p>Пн-Пт: 9:00 - 17:00</p>
+                    <p>Сб-Вс: выходной</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2015-2024 Famacolor. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Мобильное меню
+        const menuToggle = document.querySelector('.menu-toggle');
+        const nav = document.querySelector('nav');
+        
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            nav.classList.toggle('active');
+            
+            // Блокировка скролла при открытом меню
+            if (nav.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Закрытие меню при клике на ссылку
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                nav.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // Анимация при скролле
+        document.addEventListener('DOMContentLoaded', () => {
+            const animateElements = document.querySelectorAll('.animate-fade');
+            
+            const checkAnimation = () => {
+                animateElements.forEach(el => {
+                    const elPosition = el.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight / 1.1;
+                    
+                    if (elPosition < screenPosition) {
+                        el.style.animationPlayState = 'running';
+                    }
+                });
+            };
+            
+            window.addEventListener('scroll', checkAnimation);
+            checkAnimation();
+        });
+    </script>
+</body>
+</html>
